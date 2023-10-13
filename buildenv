@@ -5,7 +5,7 @@ export ZOPEN_DEV_DEPS="cmake zoslib"
 export ZOPEN_BUILD_LINE="STABLE"
 
 export ZOPEN_CONFIGURE="./libs/config"
-
+export ZOPEN_CONFIGURE_OPTIS="./b2 toolset=clang"
 zopen_check_results()
 {
   dir="$1"
