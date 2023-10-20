@@ -1,11 +1,20 @@
 export ZOPEN_STABLE_URL="https://github.com/boostorg/boost.git"
-export ZOPEN_STABLE_DEPS="cmake zoslib"
+export ZOPEN_STABLE_DEPS="cmake make zoslib which coreutils comp_clang"
 export ZOPEN_DEV_URL="https://github.com/boostorg/boost.git"
-export ZOPEN_DEV_DEPS="cmake zoslib"
-export ZOPEN_BUILD_LINE="STABLE"
+export ZOPEN_DEV_DEPS="cmake make zoslib which coreutils comp_clang"
+export ZOPEN_BUILD_LINE="DEV"
+export ZOPEN_CLONE_SUBMODULES="yes"
 
-export ZOPEN_CONFIGURE="./libs/config"
-export ZOPEN_CONFIGURE_OPTIS="./b2 toolset=clang"
+export ZOPEN_CONFIGURE="./bootstrap.sh"
+export ZOPEN_CONFIGURE_OPTS="--with-toolset=clang --prefix=\$ZOPEN_INSTALL_DIR"
+
+export ZOPEN_MAKE="zopen_make"
+
+zopen_make()
+{
+  ./b2 headers cxxflags="$CPPFLAGS $CXXFLAGS" linkflags="$LDFLAGS $LIBS"
+}
+
 zopen_check_results()
 {
   dir="$1"
