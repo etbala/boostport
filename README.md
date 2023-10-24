@@ -7,9 +7,6 @@ Run the following commands to clone the repo:
 git clone --recurse-submodules git@github.com:etbala/boostport.git
 ```
 ```
-cd boostport
-```
-```
 git submodule update --init --recursive
 ```
 
