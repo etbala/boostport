@@ -6,9 +6,6 @@ Run the following commands to clone the repo:
 ```
 git clone --recurse-submodules git@github.com:etbala/boostport.git
 ```
-```
-git submodule update --init --recursive
-```
 
 If git submodule update --init --recursive returns an error, try removing the boost path using
 ```
