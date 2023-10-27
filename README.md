@@ -2,16 +2,4 @@ boost
 
 Boost provides free peer-reviewed portable C++ source libraries.
 
-Run the following commands to clone the repo:
-```
-git clone --recurse-submodules git@github.com:etbala/boostport.git
-```
-
-If git submodule update --init --recursive returns an error, try removing the boost path using
-```
-rm -r boost
-```
-then running 
-```
-git clone --recurse-submodules git@github.com:boostorg/boost.git
-```
+We emphasize libraries that work well with the C++ Standard Library. Boost libraries are intended to be widely useful, and usable across a broad spectrum of applications. The Boost license encourages both commercial and non-commercial use and does not require attribution for binary use.
