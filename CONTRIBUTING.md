@@ -94,3 +94,17 @@ zopen build -vv
 It should build successfully
 ```
 
+In order to view the files that we have access to on z/OS, you can run the following command:
+```
+cd /usr/include
+ls
+```
+This should list all of the available files. They can be accessed however is needed (ie. vim, cat, grep)
+
+For example: 
+```
+cd /usr/include
+ls
+grep -r "StringToFind" .
+```
+Would search the current directory (and lower directories when using -r) for "StringToFind"
