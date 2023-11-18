@@ -73,7 +73,7 @@ By making a contribution to this project, I certify that:
      this project or the open source license(s) involved.
 </pre>
 
-##Building
+## Building
 
 To begin, here an example of how to build gitport on z/OS
 
