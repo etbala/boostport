@@ -108,3 +108,6 @@ ls
 grep -r "StringToFind" .
 ```
 Would search the current directory (and lower directories when using -r) for "StringToFind"
+
+
+After running the zopen build command, there should be an error that is output if it doesn't build successfully. The error message should be printed to the terminal and should also be saved in a log. 
