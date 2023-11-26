@@ -72,3 +72,42 @@ By making a contribution to this project, I certify that:
      maintained indefinitely and may be redistributed consistent with
      this project or the open source license(s) involved.
 </pre>
+
+## Building
+
+To begin, here an example of how to build gitport on z/OS
+
+```
+Create a dev directory under /YourUsername, e.g mkdir /YourUsername/dev
+
+cd dev
+
+git clone git@github.com:ZOSOpenTools/gitport.git
+Note: You may need to add your SSH key to your github profile. This would be found under Settings->SSH and GPG Keys
+
+cd gitport
+
+Add the clang compiler to your path: export PATH="/usr/lpp/IBM/oelcpp/v2r0/bin:$PATH"
+
+zopen build -vv
+
+It should build successfully
+```
+
+In order to view the files that we have access to on z/OS, you can run the following command:
+```
+cd /usr/include
+ls
+```
+This should list all of the available files. They can be accessed however is needed (ie. vim, cat, grep)
+
+For example: 
+```
+cd /usr/include
+ls
+grep -r "StringToFind" .
+```
+Would search the current directory (and lower directories when using -r) for "StringToFind"
+
+
+After running the zopen build command, there should be an error that is output if it doesn't build successfully. The error message should be printed to the terminal and should also be saved in a log. 
