@@ -19,8 +19,6 @@ index bd917b093..26dc4d5a4 100644
 -                errors.error $(n) "in" $(numbers) : is not a number ;
 +            switch $(x)
 +            {
-+                case [0-9] :
-+                    ECHO $(x) "is a number" ;
 +                case [^0-9] :
 +                    bad = true ;
 +            }
