@@ -1,0 +1,33 @@
+diff --git a/src/util/numbers.jam b/src/util/numbers.jam
+index bd917b093..26dc4d5a4 100644
+--- a/src/util/numbers.jam
++++ b/src/util/numbers.jam
+@@ -15,12 +15,24 @@ rule trim-leading-zeroes ( value )
+
+ rule check ( numbers * )
+ {
+-    for local n in $(numbers)
++    import string ;
++       for local n in $(numbers)
+     {
+-        switch $(n)
++        local bad = ;
++        local chars = [ string.chars $(n) ] ;
++        for local x in $(chars)
+         {
+-            case *[^0-9]* :
+-                errors.error $(n) "in" $(numbers) : is not a number ;
++            switch $(x)
++            {
++                case [0-9] :
++                    ECHO $(x) "is a number" ;
++                case [^0-9] :
++                    bad = true ;
++            }
++        }
++        if $(bad)
++        {
++            errors.error $(n) "in" $(numbers) : is not a number ;
+         }
+     }
+ }
