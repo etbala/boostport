@@ -11,6 +11,31 @@ export PATH="/usr/lpp/IBM/oelcpp/v2r0/bin:$PATH"
 
 export ZOPEN_MAKE="zopen_make"
 
+zopen_init()
+{
+  # This runs after clone & regular patches are applied
+  # and runs before bootstrap, configure, build
+
+  # fileunix.cpp patch -> located at ./boost/tools/build/src/engine/fileunix.cpp
+  echo "In ZOPEN_INIT, applying patch to $ZOPEN_ROOT/patches/fix_fileunix"
+  cd tools/build
+  git apply $ZOPEN_ROOT/patches/fix_fileunix
+  cd -
+
+  # execunix.cpp patch -> located at ./boost/tools/build/src/engine/execunix.cpp
+  echo "In ZOPEN_INIT, applying patch to $ZOPEN_ROOT/patches/fix_execunix"
+  cd tools/build
+  git apply $ZOPEN_ROOT/patches/fix_execunix
+  cd -
+
+  # numbers.jam patch -> located at ./boost/tools/util/numbers.jam
+  echo "In ZOPEN_INIT, applying patch to $ZOPEN_ROOT/patches/fix_numbers"
+  cd tools/build
+  git apply $ZOPEN_ROOT/patches/fix_numbers
+  cd -
+
+}
+
 zopen_make()
 {
   ./b2 headers cxxflags="$CPPFLAGS $CXXFLAGS" linkflags="$LDFLAGS $LIBS"
