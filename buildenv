@@ -19,19 +19,19 @@ zopen_init()
   # fileunix.cpp patch -> located at ./boost/tools/build/src/engine/fileunix.cpp
   echo "In ZOPEN_INIT, applying patch to $ZOPEN_ROOT/patches/fix_fileunix"
   cd tools/build
-  git apply $ZOPEN_ROOT/patches/fix_fileunix
+  git apply $ZOPEN_ROOT/patches/fileunix.cpp.diff
   cd -
 
   # execunix.cpp patch -> located at ./boost/tools/build/src/engine/execunix.cpp
   echo "In ZOPEN_INIT, applying patch to $ZOPEN_ROOT/patches/fix_execunix"
   cd tools/build
-  git apply $ZOPEN_ROOT/patches/fix_execunix
+  git apply $ZOPEN_ROOT/patches/execunix.cpp.diff
   cd -
 
   # numbers.jam patch -> located at ./boost/tools/util/numbers.jam
   echo "In ZOPEN_INIT, applying patch to $ZOPEN_ROOT/patches/fix_numbers"
   cd tools/build
-  git apply $ZOPEN_ROOT/patches/fix_numbers
+  git apply $ZOPEN_ROOT/patches/numbers.jam.diff
   cd -
 
 }
