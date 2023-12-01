@@ -44,3 +44,18 @@ If you get a permission error, it is possible you need to alter the permissions 
 If ssh cannot find your private key, you can specify the file path to the private key in the command using: `ssh username@128.xxx.xxx.xxx -i /path/to/private/key/id_rsa`.
 
 # Getting Started on z/OS 
+
+## .Profile
+
+For setting up the .profile, there are a few things that are recommended, but not required. The following commands are beneficial to add.
+
+```
+. /UserName/zopen/etc/zopen-config
+bash
+export PATH="/usr/lpp/IBM/oelcpp/v2r0/bin:$PATH"
+```
+
+This will source zopen-config, the second line will put you directly into bash, and the third line will add the CLANG compiler to your current path.
+
+
+
