@@ -121,4 +121,18 @@ First, resolve the issue in the file itself. Go to the file where the compiler e
 
 Once you have a working change, you create a patch so that the compiler error can be avoided while building on a different system.
 
+### Keeping Track of Error Logs
 
+z/OS provides a way for you to visit error logs. If the build is unsuccessful, an error message will display the reason the compiler failed. The error message will contain a warning or type of error, followed by the destination of the log file created. Every unsuccessful build will create a log file that stores the output and errors encountered during build and the file is saved in boostport's directory.  
+For example: 
+```
+***ERROR: Make (full) failed. Log: /andy/boostport/log.DEV/20231201_162710_build.log
+```
+You can visit the history of your log files by navigating to your boostport directory. 
+```
+cd /usr/boostport/log.DEV
+```
+If you have vim installed, you can view the log files: 
+```
+VIM build.log
+```
