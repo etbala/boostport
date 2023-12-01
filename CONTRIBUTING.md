@@ -111,3 +111,14 @@ Would search the current directory (and lower directories when using -r) for "St
 
 
 After running the zopen build command, there should be an error that is output if it doesn't build successfully. The error message should be printed to the terminal and should also be saved in a log. 
+
+### Compiler Errors
+Compiler errors can be common when porting boost since many of the libraries boost uses have functions that are not supported in z/OS. In order to check if a function is supported, you can check the list of available files using the above method.
+
+Once you have identified a compiler error, there are a couple steps to take as to go about resolving it.
+
+First, resolve the issue in the file itself. Go to the file where the compiler error occurs, and try to resolve it. This usually takes the form of writing a new function or using a different one that is supported by z/OS. Test this change by building again. Repeat untill the issue is resolved.
+
+Once you have a working change, you create a patch so that the compiler error can be avoided while building on a different system.
+
+
