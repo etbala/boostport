@@ -106,6 +106,8 @@ For example:
 cd /usr/include
 ls
 grep -r "StringToFind" .
+
+Note: if the grep command does not work, this is an alternative: find . -type f -exec grep -H "StringToFind" {} +
 ```
 Would search the current directory (and lower directories when using -r) for "StringToFind"
 
@@ -121,4 +123,14 @@ First, resolve the issue in the file itself. Go to the file where the compiler e
 
 Once you have a working change, you create a patch so that the compiler error can be avoided while building on a different system.
 
+### Useful Commands
+```
+zopen list - Lists everything that has been ported
+zopen build - Builds the current project
+  -h - Prints the information
+  -v - Run in verbose mode
+  -vv - Run in very verbose mode
+  -f - Force a rebuild
+  -c - Clean
+```
 
