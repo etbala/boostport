@@ -106,6 +106,8 @@ For example:
 cd /usr/include
 ls
 grep -r "StringToFind" .
+
+Note: if the grep command does not work, this is an alternative: find . -type f -exec grep -H "StringToFind" {} +
 ```
 Would search the current directory (and lower directories when using -r) for "StringToFind"
 
@@ -120,6 +122,17 @@ Once you have identified a compiler error, there are a couple steps to take as t
 First, resolve the issue in the file itself. Go to the file where the compiler error occurs, and try to resolve it. This usually takes the form of writing a new function or using a different one that is supported by z/OS. Test this change by building again. Repeat untill the issue is resolved.
 
 Once you have a working change, you create a patch so that the compiler error can be avoided while building on a different system.
+
+### Useful Commands
+```
+zopen list - Lists everything that has been ported
+zopen build - Builds the current project
+  -h - Prints the information
+  -v - Run in verbose mode
+  -vv - Run in very verbose mode
+  -f - Force a rebuild
+  -c - Clean
+```
 
 ### Keeping Track of Error Logs
 
