@@ -77,6 +77,7 @@ No pull request can be merged without being reviewed and approved.
 ## Validate your changes
 
 Verify that the project is working by running `zopen build`.
+For more information on using `zopen build`, look [here](###Useful Commands).
 
 ## Coding Guidelines
 
@@ -165,7 +166,8 @@ cd /usr/include
 ls
 grep -r "StringToFind" .
 
-Note: if the grep command does not work, this is an alternative: find . -type f -exec grep -H "StringToFind" {} +
+Note, if the grep command does not work, this is an alternative:
+find . -type f -exec grep -H "StringToFind" {} \;
 ```
 Would search the current directory (and lower directories when using -r) for "StringToFind"
 
@@ -207,3 +209,9 @@ If you have vim installed, you can view the log files:
 ```
 vim build.log
 ```
+
+## General Process
+
+Firstly, there are the compiler errors when running zopen build. For these issues, it is often that a function does not exist on z/OS that is attempting to be used in the codebase. For this, there are two options. You can either find an alternative function and use that instead of the original function that does not exist on z/OS. This can be found by using the /usr/include section for what functions exist. Alternatively, you can also define the function if it doesn't exist. 
+
+
