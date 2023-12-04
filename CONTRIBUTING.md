@@ -214,4 +214,12 @@ vim build.log
 
 Firstly, there are the compiler errors when running zopen build. For these issues, it is often that a function does not exist on z/OS that is attempting to be used in the codebase. For this, there are two options. You can either find an alternative function and use that instead of the original function that does not exist on z/OS. This can be found by using the /usr/include section for what functions exist. Alternatively, you can also define the function if it doesn't exist. 
 
-
+Adding the file can by done by writing a patch. This would be in the boostport/patches folder. In this folder, you can make a .diff file. For example, there is currently an execunix.cpp.diff file. In this file, you can add additional functions as needed that will be applied before the build process. This is an excerpt from the execunix.cpp.diff file:
+```
++#ifdef __MVS__
++                while ( ( pid = waitpid( cmdtab[ i ].pid, &status, 0 ) ) == -1 )
++#else
+                 while ( ( pid = wait4( cmdtab[ i ].pid, &status, 0, &cmd_usage ) ) == -1 )
++#endif
+```
+In this patch, we see that if `__MVS__` then we swap the wait4 function for an equivalent line using the waitpid function instead. It is important to note that `__MVS__` is true if the current platform is z/OS. This will be used extensively in patches. 
