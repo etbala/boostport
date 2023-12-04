@@ -1,4 +1,62 @@
-# Contributing
+# Getting Started on z/OS
+
+## Setting up SSH
+
+To connect to the z/OS system, we require your public SSH key. If you are unsure how to generate and retrieve your public SSH key, please follow the steps outlined below:
+
+### Windows keygen instructions
+
+Open your terminal or command prompt.
+
+Type the command `ssh-keygen -t rsa` and press Enter. This will generate a new SSH key pair at `/c/Users/<username/.ssh` by default.
+
+If you chose the default location, your public key will be available at `/c/Users/<username>/.ssh/id_rsa.pub`. Provide the contents of this file to the admin.
+
+### Linux/macOS keygen instructions
+
+Open your terminal or command prompt.
+
+Type the command `ssh-keygen -t rsa` and press Enter. This will generate a new SSH key pair at `~/.ssh` by default.
+
+If you chose the default location, your public key will be available at `~/.ssh/id_rsa.pub`. Provide the contents of this file to the admin.
+
+### Setting up a config file
+
+To connect to z/OS without typing out your username and the IP, you can set up a config file. To do this you can create a config file in your .ssh directory (`~/.ssh/config` on linux/macOS). Once you have created the file, add the following to the file.
+
+````
+Host <Alias of your choosing>
+   HostName 128.xxx.xxx.xxx
+   User <Admin provided username here>
+   IdentityFile ~/.ssh/id_rsa
+````
+
+### Connecting to z/OS
+
+Once the admin has added your public key, you should be able to connect to z/OS using `ssh username@128.xxx.xxx.xxx`. 
+
+If you set up a config file, you can connect using `ssh <alias you assigned>`.
+
+If you get a permission error, it is possible you need to alter the permissions of your private key so only you can view/edit it. You can do this by running `chmod 600 ~/.ssh/id_rsa`.
+
+If ssh cannot find your private key, you can specify the file path to the private key in the command using: `ssh username@128.xxx.xxx.xxx -i /path/to/private/key/id_rsa`.
+
+## Getting Started on z/OS 
+
+### .profile
+
+For setting up the .profile, there are a few things that are recommended, but not required. The following commands are beneficial to add.
+
+```
+. /UserName/zopen/etc/zopen-config
+bash
+export PATH="/usr/lpp/IBM/oelcpp/v2r0/bin:$PATH"
+```
+
+This will source zopen-config, the second line will put you directly into bash, and the third line will add the CLANG compiler to your current path.
+
+
+# Contributing Guidelines
 
 ## Issues
 
@@ -94,7 +152,7 @@ zopen build -vv
 It should build successfully
 ```
 
-In order to view the files that we have access to on z/OS, you can run the following command:
+In order to view the functions that we have access to on z/OS, you can run the following command:
 ```
 cd /usr/include
 ls
@@ -139,7 +197,7 @@ zopen build - Builds the current project
 z/OS provides a way for you to visit error logs. If the build is unsuccessful, an error message will display the reason the compiler failed. The error message will contain a warning or type of error, followed by the destination of the log file created. Every unsuccessful build will create a log file that stores the output and errors encountered during build and the file is saved in boostport's directory.  
 For example: 
 ```
-***ERROR: Make (full) failed. Log: /andy/boostport/log.DEV/20231201_162710_build.log
+***ERROR: Make (full) failed. Log: /UserName/boostport/log.DEV/20231201_162710_build.log
 ```
 You can visit the history of your log files by navigating to your boostport directory. 
 ```
@@ -147,5 +205,5 @@ cd /usr/boostport/log.DEV
 ```
 If you have vim installed, you can view the log files: 
 ```
-VIM build.log
+vim build.log
 ```
