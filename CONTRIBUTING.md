@@ -185,7 +185,14 @@ Buildenv is the main file that will be altered in order to make build changes. T
      git apply $ZOPEN_ROOT/patches/fileunix.cpp.diff
      cd -
    ```
-  * 
+  *  The next funciton is ```zopen_make()``` and its purpose is to specify build changes. If you are familiar with make most of the content here should be similar. For example, we wanted to use certain flags on the compilation of our build, so we specified:
+    ```
+    ./b2 headers cxxflags="$CPPFLAGS $CXXFLAGS" linkflags="$LDFLAGS $LIBS"
+    ```
+  * The next function is ```zopen_check_results()``` which occurs post-build and clarifies how successful the build was. Currently no changes need to be made as the default for checking the build should be sufficient.
+  * The next function is ```zopen_append_to_env()``` which echoes environment variables outside of PATH, MANPATH, and LIBPATH.
+  * ```zopen_append_to_setup()``` will echo commands that will run when installing via setup.sh```
+  * Finally, ```zopen_get_version()``` is supposed to echo the version of the library. Currently it is hardcoded but in the future it should be based off the tool/libary.
 
 
 ### Compiler Errors
