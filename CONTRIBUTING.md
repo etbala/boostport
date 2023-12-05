@@ -174,6 +174,20 @@ Would search the current directory (and lower directories when using -r) for "St
 
 After running the zopen build command, there should be an error that is output if it doesn't build successfully. The error message should be printed to the terminal and should also be saved in a log. 
 
+### Buildenv
+Buildenv is the main file that will be altered in order to make build changes. There are multiple sections that each serve a different purpose.
+  * The first section is before any of the functions run, and it is where all of the pro compilation changes should be made. For example, we wanted to specify which compiler to use so we added ```export ZOPEN_CONFIGURE_OPTS="--with-toolset=clang --prefix=\$ZOPEN_INSTALL_DIR"```. All of these should be clarified with ```export```.
+  * The next part is the funciton ```zopen_init()```. This will run right after the default patches are applied to the build. The function is dedicated to applying the custom patches that are created using the .diff file in [General Process](#general-process). These are then applied in this function. For example, the patch application of fileunix.cpp is shown below:
+   ```
+    # fileunix.cpp patch -> located at ./boost/tools/build/src/engine/fileunix.cpp
+     echo "In ZOPEN_INIT, applying patch to $ZOPEN_ROOT/patches/fix_fileunix"
+     cd tools/build
+     git apply $ZOPEN_ROOT/patches/fileunix.cpp.diff
+     cd -
+   ```
+  * 
+
+
 ### Compiler Errors
 Compiler errors can be common when porting boost since many of the libraries boost uses have functions that are not supported in z/OS. In order to check if a function is supported, you can check the list of available files using the above method.
 
