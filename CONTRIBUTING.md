@@ -231,6 +231,45 @@ If you have vim installed, you can view the log files:
 vim build.log
 ```
 
+### Using Dump Files
+
+If certain exceptions occur, then the build process will create a CEE (Common Execution Environment) dump file and produce an output similar to the following:
+```
+CEE3204S The system detected a protection exception (System Completion Code=0C4).
+    From entry point _Z11list_appendP4LISTS0_ at compile unit offset +000000002665EB28 at entry offset +0000000000000188 at address 000000002665EB28.
+```
+
+A CEE dump file is generated when the build process encounters a critical exception. The purpose of this file is to record a traceback, capturing relevant information about the state of the program at the moment the exception occurred.
+
+To locate the dump files:
+```
+ls CEEDUMP.*
+```
+
+The dump file provides a traceback of function calls (and the critical exception) in reverse chronological order. Since function names in C++ are mangled, you should use a demangler such as `http://demangler.com/`: demangling `_Z11list_appendP4LISTS0_` gives `list_append(LIST*, LIST*)`.
+
+To generate a list of files containing that function:
+```
+git grep --recurse-submodules list_append
+```
+
+To locate the function definition, you can use a utility called `ctags`.
+First, install `ctags`:
+```
+zopen install ctags
+```
+
+Next, use `ctags` to generate a tags file for the source code in the current directory and its subdirectories:
+```
+ctags -R .
+```
+The tags file contains an index of functions, classes, variables, and other identifiers in the code.
+
+Finally, use Vim to open the file containing the tag for `list_append` and place the cursor at the corresponding line:
+```
+vim -t list_append
+```
+
 ## General Process
 
 Firstly, there are the compiler errors when running zopen build. For these issues, it is often that a function does not exist on z/OS that is attempting to be used in the codebase. For this, there are two options. You can either find an alternative function and use that instead of the original function that does not exist on z/OS. This can be found by using the /usr/include section for what functions exist. Alternatively, you can also define the function if it doesn't exist. 
