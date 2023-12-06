@@ -1,0 +1,46 @@
+diff --git a/src/engine/lists.cpp b/src/engine/lists.cpp
+index 4b7fbce4c..d5c8d1ace 100644
+--- a/src/engine/lists.cpp
++++ b/src/engine/lists.cpp
+@@ -43,7 +43,6 @@ static void list_dealloc( LIST * l )
+ /*
+  * list_append() - append a list onto another one, returning total
+  */
+-
+ LIST * list_append( LIST * l, LIST * nl )
+ {
+     if ( list_empty( l ) )
+@@ -55,19 +54,28 @@ LIST * list_append( LIST * l, LIST * nl )
+         int32_t size = l_size + nl_size;
+         int32_t bucket = get_bucket( size );
+ 
++        assert(bucket > 0);
++
+         /* Do we need to reallocate? */
+         if ( l_size <= ( int32_t(1) << ( bucket - 1 ) ) )
+         {
+             LIST * result = list_alloc( size );
+-            memcpy( list_begin( result ), list_begin( l ), l_size * sizeof(
+-                OBJECT * ) );
++            memcpy( list_begin( result ), list_begin( l ), l_size * sizeof( LIST ) );
+             list_dealloc( l );
+             l = result;
+         }
+ 
+-        l->impl.size = size;
+-        memcpy( list_begin( l ) + l_size, list_begin( nl ), nl_size * sizeof(
+-            OBJECT * ) );
++        int32_t cur_size = size;
++        LIST *p = l;
++        p->impl.size = cur_size;
++        cur_size -= 1;
++        while (p->impl.next != L0) {
++            p = p->impl.next;
++            p->impl.size = cur_size;
++            cur_size -= 1;
++        }
++        p->impl.next = list_begin(nl);
++        memcpy( list_begin( l ) + l_size, list_begin( nl ), nl_size * sizeof( LIST ) );
+         list_dealloc( nl );
+     }
+     return l;
