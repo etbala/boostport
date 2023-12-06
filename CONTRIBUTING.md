@@ -215,6 +215,26 @@ zopen build - Builds the current project
   -c - Clean
 ```
 
+### Editing Files on z/OS
+
+Using VIM is the quickest and easiest ways to edit files in z/OS Open Tools. VIM is the recommended text editor for z/OS and can be installed by running the following command: 
+```
+zopen install vim
+```
+After making changes to a file in the server, you can securely transfer the updated file back to your local machine and then to GitHub repository using the scp command.
+
+Command: 
+```
+scp -i ~/.ssh/your_ssh_key username@server_ip:/remote/directory/updated_file.cpp /local/directory/destination_file.cpp
+```
+Push the changes to your GitHub repository:
+```
+cd /local/git/repo/directory
+git add .
+git commit -m "Updated file"
+git push origin main
+```
+
 ### Keeping Track of Error Logs
 
 z/OS provides a way for you to visit error logs. If the build is unsuccessful, an error message will display the reason the compiler failed. The error message will contain a warning or type of error, followed by the destination of the log file created. Every unsuccessful build will create a log file that stores the output and errors encountered during build and the file is saved in boostport's directory.  
