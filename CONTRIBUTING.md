@@ -152,7 +152,11 @@ zopen build -vv
 
 It should build successfully
 ```
-
+You can also run zopen build from the root directory of the git repository you would like to build. For Boost:
+```
+cd ${HOME}/zopen/dev/boostport
+zopen build
+```
 In order to view the functions that we have access to on z/OS, you can run the following command:
 ```
 cd /usr/include
@@ -206,6 +210,7 @@ Once you have a working change, you create a patch so that the compiler error ca
 
 ### Useful Commands
 ```
+zopen --help - See the list of commands
 zopen list - Lists everything that has been ported
 zopen build - Builds the current project
   -h - Prints the information
@@ -213,6 +218,26 @@ zopen build - Builds the current project
   -vv - Run in very verbose mode
   -f - Force a rebuild
   -c - Clean
+```
+
+### Editing Files on z/OS
+
+Using VIM is the quickest and easiest ways to edit files in z/OS Open Tools. VIM is the recommended text editor for z/OS and can be installed by running the following command: 
+```
+zopen install vim
+```
+After making changes to a file in the server, you can securely transfer the updated file back to your local machine and then to GitHub repository using the scp command.
+
+Command: 
+```
+scp -i ~/.ssh/your_ssh_key username@server_ip:/remote/directory/updated_file.cpp /local/directory/destination_file.cpp
+```
+Push the changes to your GitHub repository:
+```
+cd /local/git/repo/directory
+git add .
+git commit -m "Updated file"
+git push origin main
 ```
 
 ### Keeping Track of Error Logs
