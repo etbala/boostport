@@ -1,0 +1,28 @@
+diff --git a/src/engine/execunix.cpp b/src/engine/execunix.cpp
+index fd8220e77..80d2d8336 100644
+--- a/src/engine/execunix.cpp
++++ b/src/engine/execunix.cpp
+@@ -526,7 +526,7 @@ void exec_wait()
+                 int status;
+                 int rstat;
+                 timing_info time_info;
+-                struct rusage cmd_usage;
++                struct rusage cmd_usage = {0};
+
+                 /* We found a terminated child process - our search is done. */
+                 finished = 1;
+@@ -537,9 +537,14 @@ void exec_wait()
+                     close_streams( i, ERR );
+
+                 /* Reap the child and release resources. */
++#ifdef __MVS__
++                while ( ( pid = waitpid( cmdtab[ i ].pid, &status, 0 ) ) == -1 )
++#else
+                 while ( ( pid = wait4( cmdtab[ i ].pid, &status, 0, &cmd_usage ) ) == -1 )
++#endif
+                     if ( errno != EINTR )
+                         break;
++
+                 if ( pid != cmdtab[ i ].pid )
+                 {
+                     err_printf( "unknown pid %d with errno = %d\n", pid, errno );

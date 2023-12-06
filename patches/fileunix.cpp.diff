@@ -1,0 +1,137 @@
+diff --git a/src/engine/fileunix.cpp b/src/engine/fileunix.cpp
+index 6cde3f695..010765046 100644
+--- a/src/engine/fileunix.cpp
++++ b/src/engine/fileunix.cpp
+@@ -41,6 +41,8 @@
+ #include <stdio.h>
+ #include <sys/stat.h>  /* needed for mkdir() */
+
++#include <string.h>
++
+ #if defined( sun ) || defined( __sun ) || defined( linux )
+ # include <unistd.h>  /* needed for read and close prototype */
+ #endif
+@@ -57,6 +59,7 @@
+ # include <unistd.h>  /* need unistd for rhapsody's proper lseek */
+ # define STRUCT_DIRENT struct direct
+ #else
++#define _ALL_SOURCE
+ # include <dirent.h>
+ # define STRUCT_DIRENT struct dirent
+ #endif
+@@ -108,6 +111,115 @@ struct ar_hdr  /* archive file member header - printable ascii */
+  * file_collect_dir_content_() - collects directory content information
+  */
+
++/* Scan directory for entries */
++#ifdef __MVS__
++int
++scandir(
++       const char *dirp, struct dirent ***namelist,
++       int (*filter)(const struct dirent*),
++       int (*compar)(const struct dirent**, const struct dirent**))
++{
++       int result;
++
++       /* Open directory stream */
++       DIR *dir = opendir(dirp);
++       if (!dir) {
++               /* Cannot open directory */
++               return /*Error*/ -1;
++       }
++
++       /* Read directory entries to memory */
++       struct dirent *tmp = NULL;
++       struct dirent **files = NULL;
++       size_t size = 0;
++       size_t allocated = 0;
++       while (1) {
++               /* Allocate room for a temporary directory entry */
++               if (!tmp) {
++                       tmp = (struct dirent*) malloc(sizeof(struct dirent));
++                       if (!tmp)
++                               goto exit_failure;
++               }
++
++               /* Read directory entry to temporary area */
++               struct dirent *entry;
++               if (readdir_r(dir, tmp, &entry) != /*OK*/0)
++                       goto exit_failure;
++
++               /* Stop if we already read the last directory entry */
++               if (entry == NULL)
++                       goto exit_success;
++
++               /* Determine whether to include the entry in results */
++               if (filter && !filter(tmp))
++                       continue;
++
++               /* Enlarge pointer table to make room for another pointer */
++               if (size >= allocated) {
++                       /* Compute number of entries in the new table */
++                       size_t num_entries = size * 2 + 16;
++
++                       /* Allocate new pointer table or enlarge existing */
++                       void *p = realloc(files, sizeof(void*) * num_entries);
++                       if (!p)
++                               goto exit_failure;
++
++                       /* Got the memory */
++                       files = (dirent**) p;
++                       allocated = num_entries;
++               }
++
++               /* Store the temporary entry to ptr table */
++               files[size++] = tmp;
++               tmp = NULL;
++       }
++
++exit_failure:
++       /* Release allocated entries */
++       for (size_t i = 0; i < size; i++) {
++               free(files[i]);
++       }
++
++       /* Release the pointer table */
++       free(files);
++       files = NULL;
++
++       /* Exit with error code */
++       result = /*error*/ -1;
++       goto exit_status;
++
++exit_success:
++       /* Sort directory entries */
++       if (size > 1 && compar) {
++               qsort(files, size, sizeof(void*),
++                       (int (*) (const void*, const void*)) compar);
++       }
++
++       /* Pass pointer table to caller */
++       if (namelist)
++               *namelist = files;
++
++       /* Return the number of directory entries read */
++       result = (int) size;
++
++exit_status:
++       /* Release temporary directory entry, if we had one */
++       free(tmp);
++
++       /* Close directory stream */
++       closedir(dir);
++       return result;
++}
++
++/* Alphabetical sorting */
++int
++alphasort(const struct dirent **a, const struct dirent **b)
++{
++       return strcoll((*a)->d_name, (*b)->d_name);
++}
++#endif
++
++
+ int file_collect_dir_content_( file_info_t * const d )
+ {
+     LIST * files = L0;
