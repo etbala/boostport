@@ -152,7 +152,11 @@ zopen build -vv
 
 It should build successfully
 ```
-
+You can also run zopen build from the root directory of the git repository you would like to build. For Boost:
+```
+cd ${HOME}/zopen/dev/boostport
+zopen build
+```
 In order to view the functions that we have access to on z/OS, you can run the following command:
 ```
 cd /usr/include
@@ -206,6 +210,7 @@ Once you have a working change, you create a patch so that the compiler error ca
 
 ### Useful Commands
 ```
+zopen --help - See the list of commands
 zopen list - Lists everything that has been ported
 zopen build - Builds the current project
   -h - Prints the information
