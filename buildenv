@@ -5,15 +5,35 @@ export ZOPEN_DEV_DEPS="cmake make zoslib which coreutils comp_clang"
 export ZOPEN_BUILD_LINE="DEV"
 export ZOPEN_CLONE_SUBMODULES="yes"
 
-export ZOPEN_CONFIGURE="./bootstrap.sh"
-export ZOPEN_CONFIGURE_OPTS="--with-toolset=clang --prefix=\$ZOPEN_INSTALL_DIR"
-export PATH="/usr/lpp/IBM/oelcpp/v2r0/bin:$PATH"
+export ZOPEN_BOOTSTRAP="./bootstrap.sh"
+export ZOPEN_BOOTSTRAP_OPTS="--with-toolset=clang --prefix=$ZOPEN_INSTALL_DIR"
+export ZOPEN_CONFIGURE=skip
+export ZOPEN_CLEAN=skip
+export ZOPEN_MAKE="./b2"
+export ZOPEN_MAKE_MINIMAL="yes"
 
-export ZOPEN_MAKE="zopen_make"
-
-zopen_make()
+zopen_init()
 {
-  ./b2 headers cxxflags="$CPPFLAGS $CXXFLAGS" linkflags="$LDFLAGS $LIBS"
+  # This runs after clone & regular patches are applied
+  # and runs before bootstrap, configure, build
+
+  # fileunix.cpp patch -> located at ./boost/tools/build/src/engine/fileunix.cpp
+  echo "In ZOPEN_INIT, applying patch to $ZOPEN_ROOT/patches/fix_fileunix"
+  cd tools/build
+  git apply $ZOPEN_ROOT/patches/fileunix.cpp.diff
+  cd -
+
+  # execunix.cpp patch -> located at ./boost/tools/build/src/engine/execunix.cpp
+  echo "In ZOPEN_INIT, applying patch to $ZOPEN_ROOT/patches/fix_execunix"
+  cd tools/build
+  git apply $ZOPEN_ROOT/patches/execunix.cpp.diff
+  cd -
+
+  # numbers.jam patch -> located at ./boost/tools/util/numbers.jam
+  echo "In ZOPEN_INIT, applying patch to $ZOPEN_ROOT/patches/fix_numbers"
+  cd tools/build
+  git apply $ZOPEN_ROOT/patches/numbers.jam.diff
+  cd -
 }
 
 zopen_check_results()
